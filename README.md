@@ -24,6 +24,17 @@ Can LLMs convert raw logs into structured incident analysis?
 Can automation reduce MTTR without removing human oversight?
 
 
+Architecture 
+
+
+
+<img width="1495" height="722" alt="Agentic SOC-Splunk MCP - Archtectural Diagram" src="https://github.com/user-attachments/assets/fee8707f-e4cd-44fc-ba5d-1f3d3adcbefc" />
+
+
+
+
+
+
 Core Components
 
 1️⃣ Splunk SIEM
