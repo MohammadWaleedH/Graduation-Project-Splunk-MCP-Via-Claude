@@ -44,6 +44,56 @@ This project was built to explore:
 
 
 
+## Core Components
+
+| Component | Role | Key function |
+|---|---|---|
+| **Splunk SIEM** | Detection and log source | Correlates endpoint logs and triggers alerts |
+| **n8n** | Automation layer | Receives alerts and routes them through AI to Slack |
+| **OpenAI API** | Alert triage engine | Adds context, severity, and response guidance to each alert |
+| **Claude + Splunk MCP** | Investigation assistant | Turns plain-English questions into Splunk queries |
+| **Slack** | Notification channel | Delivers enriched alerts to the SOC team |
+
+### 1. Splunk SIEM
+- Collects Windows and Linux security logs through Universal Forwarders
+- Correlates events and triggers alerts for the simulated attacks
+- Sends each triggered alert to n8n through a webhook
+- Exposes its data to Claude through the Splunk MCP Server
+
+### 2. n8n Automation
+- Listens for Splunk alerts on a webhook
+- Extracts the alert name and result data and formats them into a structured message
+- Sends the message to OpenAI for analysis
+- Forwards the AI response to Slack
+
+### 3. OpenAI: SOC Analyst Engine
+The model is prompted to act as a **Tier-1 SOC analyst**. For each alert it:
+
+- Classifies the attack type
+- Assigns a severity level
+- Maps the activity to **MITRE ATT&CK** tactics and techniques
+- Judges whether the alert is likely a real incident or a false positive
+- Recommends triage and mitigation steps based on industry best practice
+
+### 4. Claude + Splunk MCP
+Claude Desktop connects to Splunk through the MCP Server, so analysts can hunt threats in
+natural language instead of writing SPL by hand. Claude translates the question into a
+Splunk query and returns the results with context.
+
+**Example prompts**
+- "Show all failed logins from this IP."
+- "When did this brute-force attack begin?"
+- "Which users were added in the last 24 hours?"
+- "How should we mitigate this brute-force attack?"
+
+## Agentic SOC Capabilities
+
+- **Automated Level-1 triage**: every alert is analyzed before a human sees it
+- **Attack classification**: alert type, severity, and MITRE mapping
+- **Log correlation**: Splunk rules link raw events into meaningful alerts
+- **Natural-language threat hunting**: ask questions instead of writing queries
+- **Mitigation advice**: response recommendations with every alert
+- **Slack-based reporting**: enriched alerts delivered where the team already works
 
 
 
@@ -55,70 +105,6 @@ This project was built to explore:
 
 
 
-
-Core Components
-
-1️⃣ Splunk SIEM
-
-Generates real-time alerts
-
-Provides log data for investigation
-
-Connected to Claude via MCP for contextual queries
-
-2️⃣ n8n Automation
-
-Listens for Splunk alerts (via webhook or API)
-
-Formats alert payload
-
-Sends structured data to OpenAI
-
-Routes AI output to Slack
-
-3️⃣ OpenAI – SOC Analyst Engine
-
-Processes alerts and:
-
-Classifies attack type
-
-Assigns severity level
-
-Maps to MITRE ATT&CK (when applicable)
-
-Generates:
-
-Incident summary
-
-Timeline analysis
-
-Root cause hypothesis
-
-Mitigation recommendations
-
-4️⃣ Claude + Splunk MCP
-
-Allows natural language threat hunting:
-
-Example prompts:
-
-“When did this attack begin?”
-
-“Show all failed logins from this IP.”
-
-“Was lateral movement detected?”
-
-“How should we mitigate this brute-force attack?”
-
-Claude translates prompts into structured Splunk queries and returns contextualized results.
-
-🤖 Agentic SOC Capabilities
-
-Automated Level-1 triage
-
-Attack classification
-
-Log correlation
 
 Threat hunting via natural language
 
